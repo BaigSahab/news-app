@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import './App.css'
 import Header from './components/Header'
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Home from './screens/home'
 
 const App: React.FC = () => {
 
@@ -20,10 +21,15 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <div dir='ltr'>
-        <CssBaseline />
-        <Header setMode={setMode} mode={mode} />
-      </div>
+      <Router>
+        <div dir='ltr'>
+          <CssBaseline />
+          <Header setMode={setMode} mode={mode} />
+          <Routes>
+            <Route path='/' element={<Home />} />
+          </Routes>
+        </div>
+      </Router>
     </ThemeProvider>
   )
 }
