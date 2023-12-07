@@ -4,20 +4,7 @@ import { Link } from 'react-router-dom';
 import EastIcon from "@mui/icons-material/East";
 import EventIcon from "@mui/icons-material/Event";
 import moment from 'moment';
-
-
-interface INews {
-    author: string;
-    content: string;
-    description: string;
-    publishedAt: string;
-    source: { id: string; name: string; }
-    id: string;
-    name: string;
-    title: string;
-    url: string;
-    urlToImage: string;
-}
+import { INews } from '../NewsModel';
 
 interface INewsProps {
     data: INews
@@ -26,16 +13,17 @@ interface INewsProps {
 
 
 const NewsCard: React.FC<INewsProps> = ({ data }) => {
+    const fallbackImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png';
     return (
         <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ maxWidth: 500, height: '100%', m: "0 auto" }}>
                 <CardMedia
                     sx={{ height: 200 }}
-                    image={data?.urlToImage}
+                    image={data?.urlToImage || fallbackImage}
                     title={data?.title}
                     onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                         // Replace the source with the fallback image on error
-                        e.currentTarget.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png';
+                        e.currentTarget.src = fallbackImage;
                     }}
                 />
                 <CardContent sx={{ paddingTop: "0.5rem" }}>

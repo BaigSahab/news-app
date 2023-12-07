@@ -4,19 +4,7 @@ import TopicSelector from '../components/TopicSelector';
 import { Grid, Container, CircularProgress, Box, Alert, AlertTitle } from '@mui/material';
 import NewsCard from '../components/NewsCard';
 import moment from 'moment';
-
-interface INews {
-    author: string;
-    content: string;
-    description: string;
-    publishedAt: string;
-    source: { id: string; name: string; }
-    id: string;
-    name: string;
-    title: string;
-    url: string;
-    urlToImage: string;
-}
+import { INews } from '../NewsModel';
 
 interface IHomeProps {
     language: 'en' | 'ar'
