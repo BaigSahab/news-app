@@ -22,7 +22,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <div dir='ltr'>
+        <div dir='rtl'>
           <CssBaseline />
           <Header setMode={setMode} mode={mode} />
           <Routes>

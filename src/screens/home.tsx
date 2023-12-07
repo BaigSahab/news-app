@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import axios, { AxiosError } from 'axios'
-import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
+import React, { useState, useEffect } from 'react';
+import axios, { AxiosError } from 'axios';
 import TopicSelector from '../components/TopicSelector';
+import { Grid, Container, CircularProgress, Box, Alert, AlertTitle } from '@mui/material';
+import NewsCard from '../components/NewsCard';
 
 interface INews {
     author: string;
@@ -36,7 +36,7 @@ const Home: React.FC = () => {
                 setLoading(false);
             } catch (e: unknown) {
                 setLoading(false);
-                setError((e as AxiosError).message);
+                setError((e as AxiosError)?.response?.data?.message || (e as AxiosError)?.message);
             }
         }
         fetchNews();
@@ -46,6 +46,23 @@ const Home: React.FC = () => {
     return (
         <div>
             <TopicSelector topic={topic} setTopic={setTopic} />
+            <Container sx={{ padding: { xs: '2rem', md: '2rem' } }}>
+                {loading &&
+                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
+                        <CircularProgress />
+                    </Box>}
+                {error && <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    {error}
+                </Alert>}
+                {!loading && !error && <Grid container spacing={3} my={1}>
+                    {news?.map((item) => (
+                        <NewsCard key={item.id} data={item} />
+                    ))
+                    }
+                </Grid>
+                }
+            </Container>
         </div>
     )
 }

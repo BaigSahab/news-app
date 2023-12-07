@@ -19,9 +19,9 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ topic, setTopic }) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                flexWrap: 'wrap',
                 width: '100%',
                 px: 3,
-                mb: 5
             }}>
                 {topics.map((t) => (
                     <Chip
@@ -31,7 +31,7 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ topic, setTopic }) => {
                         color={t === topic ? 'primary' : 'default'}
                         onClick={() => handleTopicChange(t)}
                         sx={{
-                            m: 3
+                            m: 2
                         }}
                     />
                 ))}
