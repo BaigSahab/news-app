@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 import TopicSelector from '../components/TopicSelector';
 import { Grid, Container, CircularProgress, Box, Alert, AlertTitle } from '@mui/material';
 import NewsCard from '../components/NewsCard';
+import moment from 'moment';
 
 interface INews {
     author: string;
@@ -17,7 +18,11 @@ interface INews {
     urlToImage: string;
 }
 
-const Home: React.FC = () => {
+interface IHomeProps {
+    language: 'en' | 'ar'
+}
+
+const Home: React.FC<IHomeProps> = ({ language }) => {
 
     const [news, setNews] = useState<INews[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -29,7 +34,7 @@ const Home: React.FC = () => {
                 setError("");
                 setLoading(true);
                 const response = await axios.get(
-                    `https://newsapi.org/v2/everything?q=${topic}&apiKey=${import.meta.env.VITE_NEWS_API_KEY}`
+                    `https://newsapi.org/v2/everything?q=${topic}&language=${language}&sortBy=publishedAt&from=${moment().subtract(7, 'days').format('YYYY-MM-DD')}&to=${moment().format('YYYY-MM-DD')}&apiKey=${import.meta.env.VITE_NEWS_API_KEY} `
                 );
                 setNews(response.data?.articles);
 
@@ -40,7 +45,7 @@ const Home: React.FC = () => {
             }
         }
         fetchNews();
-    }, [topic]);
+    }, [topic, language]);
 
 
     return (
@@ -56,10 +61,12 @@ const Home: React.FC = () => {
                     {error}
                 </Alert>}
                 {!loading && !error && <Grid container spacing={3} my={1}>
-                    {news?.map((item) => (
+                    {news.length ? news.map((item) => (
                         <NewsCard key={item.id} data={item} />
-                    ))
-                    }
+                    )) : <Alert severity="info">
+                        <AlertTitle>No News Found</AlertTitle>
+                        Check back again — Or browser other topics
+                    </Alert>}
                 </Grid>
                 }
             </Container>

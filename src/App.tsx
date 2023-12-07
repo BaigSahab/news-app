@@ -8,6 +8,7 @@ import Home from './screens/home'
 const App: React.FC = () => {
 
   const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [language, setLanguage] = useState<'en' | 'ar'>('en');
 
   const theme = React.useMemo(
     () =>
@@ -22,11 +23,11 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <div dir='rtl'>
+        <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
           <CssBaseline />
-          <Header setMode={setMode} mode={mode} />
+          <Header setMode={setMode} mode={mode} setLanguage={setLanguage} language={language} />
           <Routes>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<Home language={language} />} />
           </Routes>
         </div>
       </Router>
