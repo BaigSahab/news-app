@@ -1,5 +1,6 @@
 import React from 'react';
 import { Chip, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 interface TopicSelectorProps {
     topic: string;
@@ -7,6 +8,7 @@ interface TopicSelectorProps {
 }
 
 const TopicSelector: React.FC<TopicSelectorProps> = ({ topic, setTopic }) => {
+    const { t } = useTranslation()
     const topics = ['apple', 'meta', 'netflix', 'google', 'twitter', 'tesla'];
 
     const handleTopicChange = (newTopic: string) => {
@@ -23,13 +25,13 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ topic, setTopic }) => {
                 width: '100%',
                 px: 3,
             }}>
-                {topics.map((t) => (
+                {topics.map((option) => (
                     <Chip
-                        key={t}
-                        label={t}
+                        key={option}
+                        label={t(option.toUpperCase())}
                         clickable
-                        color={t === topic ? 'primary' : 'default'}
-                        onClick={() => handleTopicChange(t)}
+                        color={option === topic ? 'primary' : 'default'}
+                        onClick={() => handleTopicChange(option)}
                         sx={{
                             m: 2
                         }}

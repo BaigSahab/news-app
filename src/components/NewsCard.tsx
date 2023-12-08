@@ -1,28 +1,35 @@
-import React from 'react'
 import { Grid, Card, CardMedia, CardContent, Typography, CardActions, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import EastIcon from "@mui/icons-material/East";
+import WestIcon from "@mui/icons-material/West";
 import EventIcon from "@mui/icons-material/Event";
-import moment from 'moment';
 import { INews } from '../NewsModel';
+import { useTranslation } from 'react-i18next';
 
 interface INewsProps {
-    data: INews
+    data: INews,
+    language: 'en' | 'ar';
 }
 
-
-
-const NewsCard: React.FC<INewsProps> = ({ data }) => {
+const NewsCard: React.FC<INewsProps> = ({ data, language }) => {
+    const { t } = useTranslation()
     const fallbackImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png';
+    const dateFormatter = new Intl.DateTimeFormat(language, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+    });
     return (
         <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ maxWidth: 500, height: '100%', m: "0 auto" }}>
                 <CardMedia
                     sx={{ height: 200 }}
+                    component={'img'}
                     image={data?.urlToImage || fallbackImage}
                     title={data?.title}
                     onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                        // Replace the source with the fallback image on error
                         e.currentTarget.src = fallbackImage;
                     }}
                 />
@@ -32,7 +39,7 @@ const NewsCard: React.FC<INewsProps> = ({ data }) => {
                         sx={{ display: "flex", alignItems: "center", color: "grey" }}
                     >
                         <EventIcon sx={{ fontSize: "medium", mr: ".5rem" }} />
-                        {moment(data?.publishedAt).format('MMMM DD, YYYY  h:mm A')}
+                        {dateFormatter.format(new Date(data?.publishedAt))}
                     </Typography>
 
                     <Typography
@@ -47,11 +54,11 @@ const NewsCard: React.FC<INewsProps> = ({ data }) => {
                         {data?.title}
                     </Typography>
                     <Typography variant="body2">
-                        <strong>Author:</strong> {data?.author}
+                        <strong>{t('Author')}</strong><br /> {data?.author}
                     </Typography>
 
                     <Typography variant="body2">
-                        <strong>Source:</strong> {data?.source?.name}
+                        <strong>{t('Source')}</strong><br /> {data?.source?.name}
                     </Typography>
                     <Typography
                         variant="body2"
@@ -62,14 +69,14 @@ const NewsCard: React.FC<INewsProps> = ({ data }) => {
                 </CardContent>
 
                 <CardActions>
-                    <Link to={`${data?.url}`}>
+                    <Link to={`${data?.url}`} target={"_blank"} rel="noopener noreferrer">
                         <Button
                             variant="text"
                             size="small"
-                            endIcon={<EastIcon />}
+                            endIcon={language === 'ar' ? <WestIcon /> : <EastIcon />}
                             sx={{ fontWeight: "600" }}
                         >
-                            Read more
+                            {t('Read more')}
                         </Button>
                     </Link>
                 </CardActions>

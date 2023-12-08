@@ -5,12 +5,15 @@ import { Grid, Container, CircularProgress, Box, Alert, AlertTitle } from '@mui/
 import NewsCard from '../components/NewsCard';
 import moment from 'moment';
 import { INews } from '../NewsModel';
+import { useTranslation } from 'react-i18next';
 
 interface IHomeProps {
     language: 'en' | 'ar'
 }
 
 const Home: React.FC<IHomeProps> = ({ language }) => {
+
+    const { t } = useTranslation()
 
     const [news, setNews] = useState<INews[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -29,7 +32,8 @@ const Home: React.FC<IHomeProps> = ({ language }) => {
                 setLoading(false);
             } catch (e: unknown) {
                 setLoading(false);
-                setError((e as AxiosError)?.response?.data?.message || (e as AxiosError)?.message);
+                const errorMessage = (e as AxiosError)?.response?.data?.message || (e as AxiosError)?.message;
+                setError(errorMessage);
             }
         }
         fetchNews();
@@ -49,8 +53,8 @@ const Home: React.FC<IHomeProps> = ({ language }) => {
                     {error}
                 </Alert>}
                 {!loading && !error && <Grid container spacing={3} my={1}>
-                    {news.length ? news.map((item) => (
-                        <NewsCard key={item.id} data={item} />
+                    {news.length ? news.map((item, index) => (
+                        <NewsCard key={index} data={item} language={language} />
                     )) : <Alert severity="info">
                         <AlertTitle>No News Found</AlertTitle>
                         Check back again — Or browser other topics
